@@ -2,7 +2,7 @@
 
 **Speech recognition that adapts to your voice.**
 
-> 🚧 **Coming soon — available on 6 November 2026.**
+> 🚧 **Coming soon — available on 16 November 2026.**
 > Watch ⭐ this repository to be notified when it is released.
 
 ## About

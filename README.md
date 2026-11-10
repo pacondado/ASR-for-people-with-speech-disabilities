@@ -45,7 +45,7 @@ and improve it for their own speech, in their own language.
 
 - A Mac with an Apple chip (M1 or later) or a computer with an NVIDIA graphics card.
 - Speech recordings (a few hundred short sentences) and their transcriptions.
-- About 15 GB of free disk space and an internet connection for the installation.
+- An internet connection for the installation.
 
 ---
 
@@ -73,8 +73,7 @@ Check that you have:
 
 - **A suitable computer.** A Mac with an Apple chip (M1, M2, M3, M4…), or a computer with an
   NVIDIA graphics card. Not sure? On a Mac, open the Apple menu → *About This Mac*: if it says "Chip Apple M…",
-  you're good. Developed and tested on Apple Silicon Macs.
-- **About 15 GB of free disk space.**
+  you're good. Developed and tested on Apple Silicon Macs
 - **An internet connection** for the installation and the first training (to download Whisper).
 - **A microphone** (a phone or a headset is fine) and a quiet room.
 

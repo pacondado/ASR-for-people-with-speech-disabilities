@@ -117,11 +117,4 @@ N_MFCC = 13
 # with an empty description, unless --speakers restricts the set.
 # ============================================================
 
-PARTICIPANTS = {
-    "Condado": {
-        "description": "with speech disorders"
-    },
-    "Lobo": {
-        "description": "without speech disorders"
-    },
-}
+PARTICIPANTS = {}

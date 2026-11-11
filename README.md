@@ -45,7 +45,7 @@ and improve it for their own speech, in their own language.
 
 - A Mac with an Apple chip (M1 or later) or a computer with an NVIDIA graphics card.
 - Speech recordings (a few hundred short sentences) and their transcriptions.
-- An internet connection for the installation.
+- Free disk space for Whisper and the models you train, and an internet connection for the installation.
 
 ---
 
@@ -73,7 +73,8 @@ Check that you have:
 
 - **A suitable computer.** A Mac with an Apple chip (M1, M2, M3, M4…), or a computer with an
   NVIDIA graphics card. Not sure? On a Mac, open the Apple menu → *About This Mac*: if it says "Chip Apple M…",
-  you're good. Developed and tested on Apple Silicon Macs
+  you're good. Developed and tested on Apple Silicon Macs.
+- **Free disk space** for Whisper and the models you train.
 - **An internet connection** for the installation and the first training (to download Whisper).
 - **A microphone** (a phone or a headset is fine) and a quiet room.
 
@@ -239,7 +240,7 @@ The rules:
 3. **No spaces** before or after that first comma.
 4. If the text **contains a comma**, put the whole text between double quotes: `"…, …"`.
 5. If the text **contains double quotes**, write each one twice and put the whole text between
-   quotes, as in the line `rec_0003.wav` above.
+   quotes: `"Ele disse ""olá"" e saiu."`
 
 How to save it as `data.csv` in the folder `data/train/`:
 
@@ -305,7 +306,7 @@ You can leave the computer working; on a Mac, keep it plugged in and awake.
 
 **How long?** About **1 hour** for ~765 sentences with `medium` on an Apple Silicon Mac.
 
-**The first time**, Whisper is downloaded (about 3 GB). If some recordings are longer than
+**The first time**, Whisper is downloaded, which can take a while. If some recordings are longer than
 30 seconds, a larger Whisper model is also downloaded to cut them into pieces.
 
 ### 4.3 Where is my model?
@@ -320,7 +321,7 @@ That name describes your training: model `medium`, settings `r16`, `a32`, `lr6e-
 640 sentences used for learning, 160 for checking, and the date and time.
 
 Inside, the folder **`lora_weights`** is **your model** — the part that learned your speech. It's
-small: a few tens of megabytes, while Whisper itself is about 3 GB.
+much smaller than Whisper itself.
 
 ### 4.4 Want better results? The author's recommended settings
 
@@ -355,7 +356,7 @@ What each setting does is explained in the [reference for advanced users](#refer
 ### 5.1 Prepare the test recordings
 
 Use the extra recordings you kept apart in step 2 — **never the ones used for training**.
-Put them in a folder **with the name of the person**, and list them in `test.csv` the same way
+Put them in a folder **with your name** (`Maria` in this example), and list them in `test.csv` the same way
 as in step 3:
 
 ```
@@ -378,9 +379,6 @@ t0002.wav,"Amanhã de manhã, vou limpar os vidros."
 ```
 
 (When the text has a comma, the spreadsheet adds the quotes `"…"` for you.)
-
-You can test several people: create one folder per person (`audio/Maria/`, `audio/João/`, …),
-each with recordings of the **same sentences** listed in `test.csv`.
 
 ### 5.2 Run the test
 
@@ -419,17 +417,14 @@ LoRA:
   WER=0.000  CER=0.000
 ```
 
-The main number is the **WER (word error rate)**: the share of words that are wrong.
+The main number is the **WER** (word error rate): the share of words the model got wrong.
+For example, 0.10 means 1 word in 10 is wrong, and 0.00 is perfect. **Lower is better.**
 
-| WER | Meaning |
-|---|---|
-| 0.00 | Perfect: every word right. |
-| 0.10 | 1 word in 10 is wrong. |
-| 0.30 | 3 words in 10 are wrong. |
+At the end you'll see a summary. If the WER of your model (**LoRA**) is substantially lower than
+the WER of the original (**BASE**), your model is probably better at understanding your speech.
+A small difference can be just chance.
 
-**Lower is better.** At the end you get a summary per person: if your model's WER is lower than
-BASE, it learned. The full results are saved in the folder `output_whisper/`, in a file with the
-name of your model.
+All results are saved in the folder `output_whisper/`, in a file with the name of your model.
 
 The other numbers are explained in [Words used in this guide](#words-used-in-this-guide).
 
@@ -587,18 +582,12 @@ Run `python src/evaluation/evaluation/evaluate.py --help` for the complete list.
 |---|---|
 | `--base-model` | `small`, `medium` or `large-v3` — same as in training. |
 | `--model` | The `lora_weights` folder of your model. |
-| `--data` | Folder with `test.csv` and `audio/<person>/`. |
+| `--data` | Folder with `test.csv` and `audio/<your name>/`. |
 | `--test-csv` | Use a test CSV located elsewhere. |
 | `--language` | Same language code as in training. |
 | `--normalize` | Ignore upper/lower case and punctuation when counting errors. |
-| `--speakers` | Test only some people, e.g. `--speakers Maria`. |
 | `--output` | Name of the results file (default: `output_whisper/<model folder>.json`). |
 | `--no-per` | Skip the phoneme error rate. |
-
-**Descriptions of the people** (shown in the report, and usable with
-`compare_results.py --description`): edit `PARTICIPANTS` in
-`src/evaluation/evaluation/whisper_eval/config.py`. The default list contains the author's
-example speakers; people without a folder are skipped.
 
 **Languages other than Portuguese:** WER and CER work for any language. For languages written
 without spaces (Chinese, Japanese, Thai) look at the CER rather than the WER. The phoneme error
@@ -623,7 +612,7 @@ rate (PER) uses European Portuguese rules by default; for other languages set `E
 │       └── whisper_eval/            # test code and settings
 ├── data/
 │   ├── train/   (data.csv + audio/)
-│   └── test/    (test.csv + audio/<person>/)
+│   └── test/    (test.csv + audio/<your name>/)
 ├── run_lora.sh                      # train many settings at once
 └── LICENSE
 ```
@@ -640,11 +629,13 @@ own assistive technologies.
 
 ## Research
 
-- A paper describing this work is available on **arXiv** and has been submitted to a prestigious peer-reviewed journal in the field.
+A paper describing this work is available on **arXiv** and has been submitted to a peer-reviewed
+journal:
 
->Condado P. A & Lobo F. G. (2026). DIY Customized Speech Recognition for a Person with Speech Disabilities (arXiv Report No. 2611.11327). arXiv. https://arxiv.org/abs/2611.11327
+> Condado, P. A., & Lobo, F. G. (2026). *DIY customized speech recognition for a person with
+> speech disabilities* (arXiv:2611.11327). arXiv. https://arxiv.org/abs/2611.11327
 
-If you use this project in your work, please cite the papers above.
+If you use this project in your work, please cite this paper.
 
 ## License
 
